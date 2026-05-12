@@ -58,6 +58,11 @@ constexpr std::array kGyroInputModeLabels = {
     "Sensor",
     "Mouse",
 };
+constexpr std::array kBattleBGMModeLabels = {
+    "On",                
+    "Off",                
+    "Off During Midna's Lament",
+};
 
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
     if (backend == "auto") {
@@ -441,7 +446,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     .on_pressed([] { open_iso_picker(); }),
                 rightPane, [](Pane& pane) {
                     pane.add_rml("Set the disc image that Dusklight uses to launch the game.<br/><br/>"
-                                 "Changes require a restart.");
+                        "Changes require a restart.");
                 });
 #if DUSK_CAN_CHANGE_DATA_FOLDER
             leftPane.register_control(
@@ -476,13 +481,13 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     });
 #endif
                     pane.add_button({
-                        .text = "Reset to Default",
-                        .isDisabled = [] { return data::is_default_data_path(); },
+                                        .text = "Reset to Default",
+                                        .isDisabled = [] { return data::is_default_data_path(); },
                     }).on_pressed([] {
-                        if (data::reset_data_path()) {
-                            mDoAud_seStartMenu(kSoundItemChange);
-                        }
-                    });
+                            if (data::reset_data_path()) {
+                                mDoAud_seStartMenu(kSoundItemChange);
+                            }
+                        });
                     pane.add_rml("Data will be migrated automatically on restart.");
                 });
 #endif
@@ -793,29 +798,29 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         leftPane.add_section("Gyro");
         leftPane.register_control(
             leftPane.add_select_button({
-                .key = "Gyro Input Method",
-                .getValue =
-                    [] {
+                                      .key = "Gyro Input Method",
+                                      .getValue =
+                                          [] {
                         const auto mode = getSettings().game.gyroMode.getValue();
-                        const auto idx = static_cast<size_t>(mode);
-                        return Rml::String{kGyroInputModeLabels[idx]};
-                    },
-                .isModified =
-                    [] {
-                        return getSettings().game.gyroMode.getValue() !=
-                               getSettings().game.gyroMode.getDefaultValue();
-                    },
-            }),
+                                              const auto idx = static_cast<size_t>(mode);
+                                              return Rml::String{kGyroInputModeLabels[idx]};
+                                          },
+                                      .isModified =
+                                          [] {
+                                              return getSettings().game.gyroMode.getValue() !=
+                                                     getSettings().game.gyroMode.getDefaultValue();
+                                          },
+                                  }),
             rightPane, [](Pane& pane) {
                 for (size_t i = 0; i < kGyroInputModeLabels.size(); i++) {
                     pane
                         .add_button({
-                            .text = Rml::String{kGyroInputModeLabels[i]},
-                            .isSelected =
-                                [i] {
+                                        .text = Rml::String{kGyroInputModeLabels[i]},
+                                        .isSelected =
+                                            [i] {
                                     return getSettings().game.gyroMode.getValue() == static_cast<GyroMode>(i);
-                                },
-                        })
+                                            },
+                                    })
                         .on_pressed([i] {
                             mDoAud_seStartMenu(kSoundItemChange);
                             const GyroMode mode = static_cast<GyroMode>(i);
@@ -826,7 +831,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 pane.add_rml(
                     "<br/><b>Sensor</b> reads motion directly from a supported controller's gyro via SDL.<br/>"
                     "<br/><b>Mouse</b> treats mouse input as gyro, intended for use with the Steam Deck.<br/>"
-                    "<br/>Mouse input cannot currently be used with Gyro Rollgoal.");
+                             "<br/>Mouse input cannot currently be used with Gyro Rollgoal.");
             });
         addOption("Gyro Aim", getSettings().game.enableGyroAim,
             "Enables gyro controls while in look mode, aiming a hawk, and aiming "
@@ -920,10 +925,40 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .key = "No Low HP Sound",
                 .helpText = "Disable the beeping sound when having low health.",
             });
-        config_bool_select(leftPane, rightPane, getSettings().game.midnasLamentNonStop,
-            {
-                .key = "Non-Stop Midna's Lament",
-                .helpText = "Prevents enemy music while Midna's Lament is playing.",
+        leftPane.register_control(leftPane.add_select_button({
+                                      .key = "Battle Music",
+                                      .getValue =
+                                          [] {
+                                              const auto mode =
+                                                  getSettings().game.battleBGM.getValue();
+                                              const auto idx = static_cast<size_t>(mode);
+                                              return Rml::String{kBattleBGMModeLabels[idx]};
+                                          },
+                                      .isModified =
+                                          [] {
+                                              return getSettings().game.battleBGM.getValue() !=
+                                                     getSettings().game.battleBGM.getDefaultValue();
+                                          },
+                                  }),
+            rightPane, [](Pane& pane) {
+                for (size_t i = 0; i < kBattleBGMModeLabels.size(); i++) {
+                    pane.add_button({
+                                        .text = Rml::String{kBattleBGMModeLabels[i]},
+                                        .isSelected =
+                                            [i] {
+                                                return getSettings().game.battleBGM.getValue() ==
+                                                       static_cast<BattleBGMMode>(i);
+                                            },
+                                    })
+                        .on_pressed([i] {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                            getSettings().game.battleBGM.setValue(static_cast<BattleBGMMode>(i));
+                            config::Save();
+                        });
+                }
+                pane.add_rml("<br/>On: Plays enemy music normally.<br/>"
+                             "<br/>Off: Disables enemy music entirely.<br/>"
+                             "<br/>Mute During Lament: Prevents enemy music while Midna's Lament is playing. ");
             });
     });
 
