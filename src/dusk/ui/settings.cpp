@@ -550,7 +550,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         }
                     });
 #endif
-                   pane.add_button({
+                     pane.add_button({
                         .text = "Reset to Default",
                         .isDisabled = [] { return data::is_default_data_path(); },
                     }).on_pressed([] {
@@ -558,6 +558,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                             mDoAud_seStartMenu(kSoundItemChange);
                         }
                     });
+                       pane.add_rml("Data will be migrated automatically on restart.");
+                });
 #endif
             leftPane.register_control(
                 leftPane.add_select_button({
@@ -881,8 +883,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     },
             }),
             rightPane, [](Pane& pane) {
-                for (size_t i = 0; i < kGyroInputModeLabels.size(); i++) {
-                       pane
+                  for (size_t i = 0; i < kGyroInputModeLabels.size(); i++) {
+                    pane
                         .add_button({
                             .text = Rml::String{kGyroInputModeLabels[i]},
                             .isSelected =
@@ -917,7 +919,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             [] { return !gyro_enabled(); });
         config_percent_select(leftPane, rightPane, getSettings().game.gyroSensitivityRollgoal,
             "Rollgoal Sensitivity", "Controls how strongly gyro input tilts the Rollgoal table.",
-            25, 400, 5, [] {
+            25, 400, 5,
+            [] {
                 return !getSettings().game.enableGyroRollgoal ||
                        getSettings().game.gyroMode.getValue() == GyroMode::Mouse;
             });
