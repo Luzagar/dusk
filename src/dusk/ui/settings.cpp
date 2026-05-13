@@ -550,7 +550,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         }
                     });
 #endif
-                     pane.add_button({
+                    pane.add_button({
                         .text = "Reset to Default",
                         .isDisabled = [] { return data::is_default_data_path(); },
                     }).on_pressed([] {
@@ -558,7 +558,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                             mDoAud_seStartMenu(kSoundItemChange);
                         }
                     });
-                       pane.add_rml("Data will be migrated automatically on restart.");
+                    pane.add_rml("Data will be migrated automatically on restart.");
                 });
 #endif
             leftPane.register_control(
@@ -883,7 +883,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     },
             }),
             rightPane, [](Pane& pane) {
-                  for (size_t i = 0; i < kGyroInputModeLabels.size(); i++) {
+                for (size_t i = 0; i < kGyroInputModeLabels.size(); i++) {
                     pane
                         .add_button({
                             .text = Rml::String{kGyroInputModeLabels[i]},
