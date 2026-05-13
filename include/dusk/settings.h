@@ -39,7 +39,6 @@ enum class BattleBGMMode : u8
     On = 0,
     Off = 1,
     Off_MidnaLament = 2,
-
 };
 namespace config {
 template <>
