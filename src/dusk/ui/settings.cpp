@@ -1248,13 +1248,6 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     const auto& ctl = getSettings().game.enableControllerToasts;
                     return ach.getValue() != ach.getDefaultValue() || ctl.getValue() != ctl.getDefaultValue();
                 },
-                .isModified =
-                    [] {
-                        const auto& ach = getSettings().game.enableAchievementToasts;
-                        const auto& ctl = getSettings().game.enableControllerToasts;
-                        return ach.getValue() != ach.getDefaultValue() ||
-                               ctl.getValue() != ctl.getDefaultValue();
-                    },
             }),
             rightPane, [](Pane& pane) {
                 pane.clear();
@@ -1272,12 +1265,14 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 });
 
                 pane.add_section("Types");
-                pane.add_button({
+                pane.add_button(
+                    {
                         .text = "Achievements",
                         .isSelected =
                         [] {
                             return getSettings().game.enableAchievementToasts.getValue();
                         },
+                    })
                     .on_pressed([] {
                         mDoAud_seStartMenu(kSoundItemChange);
                         auto& v = getSettings().game.enableAchievementToasts;
