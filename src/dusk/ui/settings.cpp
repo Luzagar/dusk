@@ -20,10 +20,12 @@
 #include "menu_bar.hpp"
 #include "modal.hpp"
 #include "number_button.hpp"
+#include "menu_bar.hpp"
 #include "pane.hpp"
 #include "prelaunch.hpp"
 #include "ui.hpp"
 
+#include <aurora/lib/window.hpp>
 #include <SDL3/SDL_filesystem.h>
 #include <fmt/format.h>
 
@@ -354,9 +356,9 @@ const Rml::String kInternalResolutionHelpText =
 const Rml::String kShadowResolutionHelpText =
     "Configure the shadow-map resolution. Higher values improve shadow quality but increase GPU "
     "and memory usage.";
-const Rml::String kBloomHelpText = "Configure the post-processing bloom effect. Classic uses the "
-                                   "original bloom pass; Dusklight uses "
-                                   "a higher-quality bloom pass.";
+const Rml::String kBloomHelpText =
+    "Configure the post-processing bloom effect. Classic uses the original bloom pass; Dusklight uses "
+    "a higher-quality bloom pass.";
 const Rml::String kBloomBrightnessHelpText =
     "Configure bloom intensity. Higher values make bright areas glow more strongly.";
 const Rml::String kUnlockFramerateHelpText =
@@ -370,7 +372,7 @@ int float_setting_percent(ConfigVar<float>& var) {
 bool gyro_enabled() {
     return getSettings().game.enableGyroAim ||
            (getSettings().game.enableGyroRollgoal &&
-               getSettings().game.gyroMode.getValue() != GyroMode::Mouse);
+            getSettings().game.gyroMode.getValue() != GyroMode::Mouse);
 }
 
 struct ConfigBoolProps {
@@ -513,9 +515,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     })
                     .on_pressed([] { open_iso_picker(); }),
                 rightPane, [](Pane& pane) {
-                    pane.add_rml(
-                        "Set the disc image that Dusklight uses to launch the game.<br/><br/>"
-                        "Changes require a restart.");
+                    pane.add_rml("Set the disc image that Dusklight uses to launch the game.<br/><br/>"
+                                 "Changes require a restart.");
                 });
 #if DUSK_CAN_CHANGE_DATA_FOLDER
             leftPane.register_control(
@@ -550,14 +551,13 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                     });
 #endif
                     pane.add_button({
-                                        .text = "Reset to Default",
-                                        .isDisabled = [] { return data::is_default_data_path(); },
-                                    })
-                        .on_pressed([] {
-                            if (data::reset_data_path()) {
-                                mDoAud_seStartMenu(kSoundItemChange);
-                            }
-                        });
+                        .text = "Reset to Default",
+                        .isDisabled = [] { return data::is_default_data_path(); },
+                    }).on_pressed([] {
+                        if (data::reset_data_path()) {
+                            mDoAud_seStartMenu(kSoundItemChange);
+                        }
+                    });
                     pane.add_rml("Data will be migrated automatically on restart.");
                 });
 #endif
@@ -768,8 +768,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMin = 0,
                 .valueMax = 12,
                 .defaultValue = 0,
-            },
-            mPrelaunch);
+            }, mPrelaunch);
         graphics_tuner_control(*this, leftPane, rightPane,
             getSettings().game.shadowResolutionMultiplier,
             GraphicsTunerProps{
@@ -779,8 +778,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMin = 1,
                 .valueMax = 8,
                 .defaultValue = 1,
-            },
-            mPrelaunch);
+            }, mPrelaunch);
 
         leftPane.add_section("Post-Processing");
         graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMode,
@@ -791,8 +789,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMin = static_cast<int>(BloomMode::Off),
                 .valueMax = static_cast<int>(BloomMode::Dusk),
                 .defaultValue = static_cast<int>(BloomMode::Classic),
-            },
-            mPrelaunch);
+            }, mPrelaunch);
         graphics_tuner_control(*this, leftPane, rightPane, getSettings().game.bloomMultiplier,
             GraphicsTunerProps{
                 .option = GraphicsOption::BloomMultiplier,
@@ -801,8 +798,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 .valueMin = 0,
                 .valueMax = 100,
                 .defaultValue = 100,
-            },
-            mPrelaunch);
+            }, mPrelaunch);
 
         leftPane.add_section("Rendering");
         config_bool_select(leftPane, rightPane, getSettings().game.enableFrameInterpolation,
@@ -871,31 +867,31 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Invert vertical movement while aiming with items or first person camera. Applies only to the control stick (the gyroscope can be inverted in Input settings).");
 
         leftPane.add_section("Gyro");
-        leftPane.register_control(leftPane.add_select_button({
-                                      .key = "Gyro Input Method",
-                                      .getValue =
-                                          [] {
-                                              const auto mode =
-                                                  getSettings().game.gyroMode.getValue();
-                                              const auto idx = static_cast<size_t>(mode);
-                                              return Rml::String{kGyroInputModeLabels[idx]};
-                                          },
-                                      .isModified =
-                                          [] {
-                                              return getSettings().game.gyroMode.getValue() !=
-                                                     getSettings().game.gyroMode.getDefaultValue();
-                                          },
-                                  }),
+        leftPane.register_control(
+            leftPane.add_select_button({
+                .key = "Gyro Input Method",
+                .getValue =
+                    [] {
+                        const auto mode = getSettings().game.gyroMode.getValue();
+                        const auto idx = static_cast<size_t>(mode);
+                        return Rml::String{kGyroInputModeLabels[idx]};
+                    },
+                .isModified =
+                    [] {
+                        return getSettings().game.gyroMode.getValue() !=
+                               getSettings().game.gyroMode.getDefaultValue();
+                    },
+            }),
             rightPane, [](Pane& pane) {
                 for (size_t i = 0; i < kGyroInputModeLabels.size(); i++) {
-                    pane.add_button({
-                                        .text = Rml::String{kGyroInputModeLabels[i]},
-                                        .isSelected =
-                                            [i] {
-                                                return getSettings().game.gyroMode.getValue() ==
-                                                       static_cast<GyroMode>(i);
-                                            },
-                                    })
+                    pane
+                        .add_button({
+                            .text = Rml::String{kGyroInputModeLabels[i]},
+                            .isSelected =
+                                [i] {
+                                    return getSettings().game.gyroMode.getValue() == static_cast<GyroMode>(i);
+                                },
+                        })
                         .on_pressed([i] {
                             mDoAud_seStartMenu(kSoundItemChange);
                             const GyroMode mode = static_cast<GyroMode>(i);
@@ -903,11 +899,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                             config::Save();
                         });
                 }
-                pane.add_rml("<br/><b>Sensor</b> reads motion directly from a supported "
-                             "controller's gyro via SDL.<br/>"
-                             "<br/><b>Mouse</b> treats mouse input as gyro, intended for use with "
-                             "the Steam Deck.<br/>"
-                             "<br/>Mouse input cannot currently be used with Gyro Rollgoal.");
+                pane.add_rml(
+                    "<br/><b>Sensor</b> reads motion directly from a supported controller's gyro via SDL.<br/>"
+                    "<br/><b>Mouse</b> treats mouse input as gyro, intended for use with the Steam Deck.<br/>"
+                    "<br/>Mouse input cannot currently be used with Gyro Rollgoal.");
             });
         addOption("Gyro Aim", getSettings().game.enableGyroAim,
             "Enables gyro controls while in look mode, aiming a hawk, and aiming "
@@ -924,7 +919,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             [] { return !gyro_enabled(); });
         config_percent_select(leftPane, rightPane, getSettings().game.gyroSensitivityRollgoal,
             "Rollgoal Sensitivity", "Controls how strongly gyro input tilts the Rollgoal table.",
-            25, 400, 5, [] {
+            25, 400, 5,
+            [] {
                 return !getSettings().game.enableGyroRollgoal ||
                        getSettings().game.gyroMode.getValue() == GyroMode::Mouse;
             });
@@ -1225,10 +1221,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
 
         leftPane.add_section("Dusklight");
 #if DUSK_CAN_OPEN_DATA_FOLDER
-        leftPane.register_control(leftPane.add_button("Open Data Folder").on_pressed([] {
-            mDoAud_seStartMenu(kSoundClick);
-            data::open_data_path();
-        }),
+        leftPane.register_control(
+            leftPane.add_button("Open Data Folder").on_pressed([] {
+                mDoAud_seStartMenu(kSoundClick);
+                data::open_data_path();
+            }),
             rightPane, [](Pane& pane) {
                 pane.add_text(
                     "Open the folder where Dusklight stores settings, saves, logs, texture "
@@ -1238,25 +1235,22 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         leftPane.register_control(
             leftPane.add_select_button({
                 .key = "Notifications",
-                .getValue =
-                    [] {
-                        const bool ach = getSettings().game.enableAchievementToasts.getValue();
-                        const bool ctl = getSettings().game.enableControllerToasts.getValue();
-                        if (!ach && !ctl) {
-                            return Rml::String{"Off"};
-                        }
-                        if (ach && ctl) {
-                            return Rml::String{"All"};
-                        }
-                        return Rml::String{"Some"};
-                    },
-                .isModified =
-                    [] {
-                        const auto& ach = getSettings().game.enableAchievementToasts;
-                        const auto& ctl = getSettings().game.enableControllerToasts;
-                        return ach.getValue() != ach.getDefaultValue() ||
-                               ctl.getValue() != ctl.getDefaultValue();
-                    },
+                .getValue = [] {
+                    const bool ach = getSettings().game.enableAchievementToasts.getValue();
+                    const bool ctl = getSettings().game.enableControllerToasts.getValue();
+                    if (!ach && !ctl) {
+                        return Rml::String{"Off"};
+                    }
+                    if (ach && ctl) {
+                        return Rml::String{"All"};
+                    }
+                    return Rml::String{"Some"};
+                },
+                .isModified = [] {
+                    const auto& ach = getSettings().game.enableAchievementToasts;
+                    const auto& ctl = getSettings().game.enableControllerToasts;
+                    return ach.getValue() != ach.getDefaultValue() || ctl.getValue() != ctl.getDefaultValue();
+                },
             }),
             rightPane, [](Pane& pane) {
                 pane.clear();
@@ -1274,11 +1268,13 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                 });
 
                 pane.add_section("Types");
-                pane
-                    .add_button({
+                pane.add_button(
+                    {
                         .text = "Achievements",
                         .isSelected =
-                            [] { return getSettings().game.enableAchievementToasts.getValue(); },
+                        [] {
+                            return getSettings().game.enableAchievementToasts.getValue();
+                        },
                     })
                     .on_pressed([] {
                         mDoAud_seStartMenu(kSoundItemChange);
@@ -1287,11 +1283,11 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
                         config::Save();
                     });
                 pane.add_button(
-                        {
-                            .text = "Controller",
-                            .isSelected =
-                                [] { return getSettings().game.enableControllerToasts.getValue(); },
-                        })
+                    {
+                        .text = "Controller",
+                        .isSelected =
+                            [] { return getSettings().game.enableControllerToasts.getValue(); },
+                    })
                     .on_pressed([] {
                         mDoAud_seStartMenu(kSoundItemChange);
                         auto& v = getSettings().game.enableControllerToasts;
@@ -1323,9 +1319,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().backend.skipPreLaunchUI,
             {
                 .key = "Skip Dusklight Main Menu",
-                .helpText =
-                    "When starting Dusklight, skip the main menu and boot straight into the "
-                    "game if a disc image is available.",
+                .helpText = "When starting Dusklight, skip the main menu and boot straight into the "
+                            "game if a disc image is available.",
             });
         config_bool_select(leftPane, rightPane, getSettings().backend.showPipelineCompilation,
             {
@@ -1335,9 +1330,8 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         config_bool_select(leftPane, rightPane, getSettings().backend.checkForUpdates,
             {
                 .key = "Check for Updates",
-                .helpText =
-                    "Checks GitHub releases for a new Dusklight version on startup.<br/><br/>"
-                    "No personal information is transmitted or collected.",
+                .helpText = "Checks GitHub releases for a new Dusklight version on startup.<br/><br/>"
+                            "No personal information is transmitted or collected.",
             });
 #ifdef DUSK_DISCORD
         config_bool_select(leftPane, rightPane, getSettings().game.enableDiscordPresence,
