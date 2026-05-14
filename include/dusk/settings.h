@@ -164,6 +164,7 @@ struct UserSettings {
         ConfigVar<bool> infiniteOxygen;
         ConfigVar<bool> infiniteRupees;
         ConfigVar<bool> enableIndefiniteItemDrops;
+        ConfigVar<bool> noItemTimer;
         ConfigVar<bool> moonJump;
         ConfigVar<bool> superClawshot;
         ConfigVar<bool> alwaysGreatspin;

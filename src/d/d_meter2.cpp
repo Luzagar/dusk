@@ -300,7 +300,7 @@ int dMeter2_c::_execute() {
 
     if (!dComIfGp_isPauseFlag() && !dComIfGp_event_runCheck()
     #if TARGET_PC
-        && !dusk::getSettings().game.enableIndefiniteItemDrops
+        && !dusk::getSettings().game.noItemTimer
     #endif
         ) {
         dMeter2Info_decHotSpringTimer();

@@ -26,6 +26,7 @@ void resetForSpeedrunMode() {
     getSettings().game.infiniteOxygen.setSpeedrunValue(false);
     getSettings().game.infiniteRupees.setSpeedrunValue(false);
     getSettings().game.enableIndefiniteItemDrops.setSpeedrunValue(false);
+    getSettings().game.noItemTimer.setSpeedrunValue(false);
     getSettings().game.moonJump.setSpeedrunValue(false);
     getSettings().game.superClawshot.setSpeedrunValue(false);
     getSettings().game.alwaysGreatspin.setSpeedrunValue(false);

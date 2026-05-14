@@ -17845,7 +17845,7 @@ int daAlink_c::execute() {
     
    if (mSwordUpTimer != 0
 #if TARGET_PC
-        && !dusk::getSettings().game.enableIndefiniteItemDrops
+        && !dusk::getSettings().game.noItemTimer
 #endif
     )
     {

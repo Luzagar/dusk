@@ -193,6 +193,7 @@ void reset_for_speedrun_mode() {
     getSettings().game.infiniteOxygen.setSpeedrunValue(false);
     getSettings().game.infiniteRupees.setSpeedrunValue(false);
     getSettings().game.enableIndefiniteItemDrops.setSpeedrunValue(false);
+    getSettings().game.noItemTimer.setSpeedrunValue(false);
     getSettings().game.moonJump.setSpeedrunValue(false);
     getSettings().game.superClawshot.setSpeedrunValue(false);
     getSettings().game.alwaysGreatspin.setSpeedrunValue(false);
@@ -1155,8 +1156,10 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
             "Keeps your underwater oxygen meter full.");
         addCheat(
             "Infinite Rupees", getSettings().game.infiniteRupees, "Keeps your rupee count full.");
-        addCheat("No Item Timer", getSettings().game.enableIndefiniteItemDrops,
-            "Item drops such as rupees and hearts will never disappear after they drop, and timer-based items will last indefinitely.");
+        addCheat("No Drops Timer", getSettings().game.enableIndefiniteItemDrops,
+            "Item drops such as rupees and hearts will never disappear after they drop");
+        addCheat("No Item Timer", getSettings().game.noItemTimer,
+            "Any timer-based items will last indefinitely.");
 
         leftPane.add_section("Abilities");
         addCheat(
