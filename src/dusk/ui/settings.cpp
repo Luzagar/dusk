@@ -1156,7 +1156,7 @@ SettingsWindow::SettingsWindow(bool prelaunch) : mPrelaunch(prelaunch) {
         addCheat(
             "Infinite Rupees", getSettings().game.infiniteRupees, "Keeps your rupee count full.");
         addCheat("No Item Timer", getSettings().game.enableIndefiniteItemDrops,
-            "Item drops such as rupees and hearts will never disappear after they drop.");
+            "Item drops such as rupees and hearts will never disappear after they drop, and timer-based items will last indefinitely.");
 
         leftPane.add_section("Abilities");
         addCheat(

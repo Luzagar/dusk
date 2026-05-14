@@ -17842,8 +17842,13 @@ int daAlink_c::execute() {
             deleteEquipItem(FALSE, FALSE);
         }
     }
-
-    if (mSwordUpTimer != 0) {
+    
+   if (mSwordUpTimer != 0
+#if TARGET_PC
+        && !dusk::getSettings().game.enableIndefiniteItemDrops
+#endif
+    )
+    {
         mSwordUpTimer--;
     }
 

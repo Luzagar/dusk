@@ -298,7 +298,11 @@ int dMeter2_c::_execute() {
     moveSubContents();
     move2DContents();
 
-    if (!dComIfGp_isPauseFlag() && !dComIfGp_event_runCheck()) {
+    if (!dComIfGp_isPauseFlag() && !dComIfGp_event_runCheck()
+    #if TARGET_PC
+        && !dusk::getSettings().game.enableIndefiniteItemDrops
+    #endif
+        ) {
         dMeter2Info_decHotSpringTimer();
     }
 
