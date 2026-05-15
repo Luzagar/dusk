@@ -34,12 +34,6 @@ enum class GyroMode : u8 {
     Mouse = 1,
 };
 
-enum class BattleBGMMode : u8
-{
-    On = 0,
-    Off = 1,
-    Off_MidnaLament = 2,
-};
 namespace config {
 template <>
 struct ConfigEnumRange<BloomMode> {
@@ -138,7 +132,8 @@ struct UserSettings {
 
         // Audio
         ConfigVar<bool> noLowHpSound;
-        ConfigVar<BattleBGMMode> battleBGM;
+        ConfigVar<bool> midnasLamentNonStop;
+        ConfigVar<bool> disableEnemyBgm;
 
         // Input
         ConfigVar<GyroMode> gyroMode;

@@ -67,7 +67,8 @@ UserSettings g_userSettings = {
 
         // Audio
         .noLowHpSound {"game.noLowHpSound", false},
-        .battleBGM {"game.battleBGM",BattleBGMMode::Off_MidnaLament},
+        .midnasLamentNonStop {"game.midnasLamentNonStop", false},
+        .disableEnemyBgm {"game.disableEnemyBgm", false},
 
         // Input
         .gyroMode {"game.gyroMode", GyroMode::Sensor},
@@ -233,7 +234,8 @@ void registerSettings() {
     Register(g_userSettings.game.enableControllerToasts);
     Register(g_userSettings.game.noMissClimbing);
     Register(g_userSettings.game.noLowHpSound);
-    Register(g_userSettings.game.battleBGM);
+    Register(g_userSettings.game.midnasLamentNonStop);
+    Register(g_userSettings.game.disableEnemyBgm);
     Register(g_userSettings.game.enableTurboKeybind);
     Register(g_userSettings.game.enableResetKeybind);
     Register(g_userSettings.game.speedrunMode);

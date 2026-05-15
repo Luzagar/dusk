@@ -111,14 +111,13 @@ void Z2SoundObjMgr::searchEnemy() {
     twilightBattle_ = 0;
 
     #if TARGET_PC
-    if (Z2GetSeqMgr()->checkBgmIDPlaying(Z2BGM_MIDNA_SOS) &&
-        dusk::getSettings().game.battleBGM.getValue() == dusk::BattleBGMMode::Off_MidnaLament)
+    if (dusk::getSettings().game.disableEnemyBgm) {
+        Z2GetSeqMgr()->stopBattleBgm(1, 1);
+        return;
+    } else if (Z2GetSeqMgr()->checkBgmIDPlaying(Z2BGM_MIDNA_SOS) &&
+               dusk::getSettings().game.midnasLamentNonStop)
     {
         Z2GetSeqMgr()->changeSubBgmStatus(0);
-        return;
-    } else if (dusk::getSettings().game.battleBGM.getValue() == dusk::BattleBGMMode::Off)
-    {
-        Z2GetSeqMgr()->stopBattleBgm(1, 1);
         return;
     }
     #endif
