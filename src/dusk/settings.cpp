@@ -67,7 +67,7 @@ UserSettings g_userSettings = {
 
         // Audio
         .noLowHpSound {"game.noLowHpSound", false},
-        .battleBGM {"game.battleBGM",BattleBGMMode::On},
+        .battleBGM {"game.battleBGM",BattleBGMMode::Off_MidnaLament},
 
         // Input
         .gyroMode {"game.gyroMode", GyroMode::Sensor},
