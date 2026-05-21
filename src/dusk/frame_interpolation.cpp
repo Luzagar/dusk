@@ -21,6 +21,7 @@ bool g_sync_presentation = false;
 float g_step = 0.0f;
 bool g_is_sim_frame = false;
 bool g_ui_tick_pending = false;
+uint64_t g_sim_tick_seq = 0;
 
 Recording g_current_recording;
 Recording g_previous_recording;
@@ -134,10 +135,15 @@ void begin_sim_tick() {
 
     s_interpolationCallBackWork.clear();
     s_cam_prev = std::move(s_cam_curr);
+    ++g_sim_tick_seq;
 }
 
-void begin_frame(bool enabled, bool is_sim_frame, float step) {
-    g_enabled = enabled;
+uint64_t sim_tick_seq() {
+    return g_sim_tick_seq;
+}
+
+void begin_frame(FrameInterpMode mode, bool is_sim_frame, float step) {
+    g_enabled = mode != FrameInterpMode::Off;
     g_is_sim_frame = is_sim_frame;
     g_step = std::clamp(step, 0.0f, 1.0f);
 }
