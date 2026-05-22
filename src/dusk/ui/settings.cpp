@@ -81,6 +81,7 @@ constexpr std::array kBattleBGMModeLabels = {
     "Off",
     "Off During MDH"
 };
+
 bool try_parse_backend(std::string_view backend, AuroraBackend& outBackend) {
     if (backend == "auto") {
         outBackend = BACKEND_AUTO;

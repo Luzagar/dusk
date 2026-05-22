@@ -57,6 +57,7 @@ enum class BattleBGMMode : u8
     Off = 1,
     Off_MDH = 2,
 };
+
 namespace config {
 template <>
 struct ConfigEnumRange<BloomMode> {
