@@ -51,6 +51,12 @@ enum class MenuScaling : u8 {
     Dusklight = 2,
 };
 
+enum class BattleBGMMode : u8
+{
+    On = 0,
+    Off = 1,
+    Off_MDH = 2,
+};
 namespace config {
 template <>
 struct ConfigEnumRange<BloomMode> {
@@ -92,6 +98,12 @@ template <>
 struct ConfigEnumRange<MenuScaling> {
     static constexpr auto min = MenuScaling::GameCube;
     static constexpr auto max = MenuScaling::Dusklight;
+};
+
+template <>
+struct ConfigEnumRange<BattleBGMMode> {
+    static constexpr auto min = BattleBGMMode::On;
+    static constexpr auto max = BattleBGMMode::Off_MDH;
 };
 }  // namespace config
 
@@ -172,8 +184,7 @@ struct UserSettings {
 
         // Audio
         ConfigVar<bool> noLowHpSound;
-        ConfigVar<bool> midnasLamentNonStop;
-        ConfigVar<bool> disableEnemyBgm;
+        ConfigVar<BattleBGMMode> battleBGM;
 
         // Input
         ConfigVar<GyroMode> gyroMode;
@@ -205,6 +216,7 @@ struct UserSettings {
         ConfigVar<bool> infiniteOxygen;
         ConfigVar<bool> infiniteRupees;
         ConfigVar<bool> enableIndefiniteItemDrops;
+        ConfigVar<bool> noItemTimer;
         ConfigVar<bool> moonJump;
         ConfigVar<bool> superClawshot;
         ConfigVar<bool> alwaysGreatspin;

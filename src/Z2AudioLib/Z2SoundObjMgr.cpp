@@ -5,9 +5,7 @@
 #include "Z2AudioLib/Z2SceneMgr.h"
 #include "Z2AudioLib/Z2LinkMgr.h"
 #include <cstring>
-#if TARGET_PC
 #include "dusk/settings.h"
-#endif
 
 Z2SoundObjMgr::Z2SoundObjMgr() : JASGlobalInstance<Z2SoundObjMgr>(true) {
     ghostEnemyState_ = 0;
@@ -111,11 +109,11 @@ void Z2SoundObjMgr::searchEnemy() {
     twilightBattle_ = 0;
 
     #if TARGET_PC
-    if (dusk::getSettings().game.disableEnemyBgm) {
+    if (dusk::getSettings().game.battleBGM.getValue() == dusk::BattleBGMMode::Off) {
         Z2GetSeqMgr()->stopBattleBgm(1, 1);
         return;
     } else if (Z2GetSeqMgr()->checkBgmIDPlaying(Z2BGM_MIDNA_SOS) &&
-               dusk::getSettings().game.midnasLamentNonStop)
+               dusk::getSettings().game.battleBGM.getValue() == dusk::BattleBGMMode::Off_MDH)
     {
         Z2GetSeqMgr()->changeSubBgmStatus(0);
         return;

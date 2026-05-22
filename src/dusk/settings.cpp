@@ -72,8 +72,7 @@ UserSettings g_userSettings = {
 
         // Audio
         .noLowHpSound {"game.noLowHpSound", false},
-        .midnasLamentNonStop {"game.midnasLamentNonStop", false},
-        .disableEnemyBgm {"game.disableEnemyBgm", false},
+        .battleBGM {"game.battleBGM",BattleBGMMode::Off_MDH},
 
         // Input
         .gyroMode {"game.gyroMode", GyroMode::Sensor},
@@ -105,6 +104,7 @@ UserSettings g_userSettings = {
         .infiniteOxygen {"game.infiniteOxygen", false},
         .infiniteRupees {"game.infiniteRupees", false},
         .enableIndefiniteItemDrops {"game.enableIndefiniteItemDrops", false},
+        .noItemTimer {"game.noItemTimer", false},
         .moonJump {"game.moonJump", false},
         .superClawshot {"game.superClawshot", false},
         .alwaysGreatspin {"game.alwaysGreatspin", false},
@@ -244,8 +244,7 @@ void registerSettings() {
     Register(g_userSettings.game.enableControllerToasts);
     Register(g_userSettings.game.noMissClimbing);
     Register(g_userSettings.game.noLowHpSound);
-    Register(g_userSettings.game.midnasLamentNonStop);
-    Register(g_userSettings.game.disableEnemyBgm);
+    Register(g_userSettings.game.battleBGM);
     Register(g_userSettings.game.enableTurboKeybind);
     Register(g_userSettings.game.enableResetKeybind);
     Register(g_userSettings.game.speedrunMode);
@@ -265,6 +264,7 @@ void registerSettings() {
     Register(g_userSettings.game.infiniteOxygen);
     Register(g_userSettings.game.infiniteRupees);
     Register(g_userSettings.game.enableIndefiniteItemDrops);
+    Register(g_userSettings.game.noItemTimer);
     Register(g_userSettings.game.moonJump);
     Register(g_userSettings.game.superClawshot);
     Register(g_userSettings.game.alwaysGreatspin);
