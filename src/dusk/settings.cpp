@@ -104,7 +104,6 @@ UserSettings g_userSettings = {
         .infiniteOxygen {"game.infiniteOxygen", false},
         .infiniteRupees {"game.infiniteRupees", false},
         .enableIndefiniteItemDrops {"game.enableIndefiniteItemDrops", false},
-        .noItemTimer {"game.noItemTimer", false},
         .moonJump {"game.moonJump", false},
         .superClawshot {"game.superClawshot", false},
         .alwaysGreatspin {"game.alwaysGreatspin", false},
@@ -263,8 +262,6 @@ void registerSettings() {
     Register(g_userSettings.game.infiniteOil);
     Register(g_userSettings.game.infiniteOxygen);
     Register(g_userSettings.game.infiniteRupees);
-    Register(g_userSettings.game.enableIndefiniteItemDrops);
-    Register(g_userSettings.game.noItemTimer);
     Register(g_userSettings.game.moonJump);
     Register(g_userSettings.game.superClawshot);
     Register(g_userSettings.game.alwaysGreatspin);
