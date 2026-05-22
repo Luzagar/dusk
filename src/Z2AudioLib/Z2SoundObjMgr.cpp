@@ -5,7 +5,9 @@
 #include "Z2AudioLib/Z2SceneMgr.h"
 #include "Z2AudioLib/Z2LinkMgr.h"
 #include <cstring>
+#if TARGET_PC
 #include "dusk/settings.h"
+#endif
 
 Z2SoundObjMgr::Z2SoundObjMgr() : JASGlobalInstance<Z2SoundObjMgr>(true) {
     ghostEnemyState_ = 0;
