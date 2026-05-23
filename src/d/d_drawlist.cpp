@@ -2015,7 +2015,10 @@ void dDlst_list_c::draw(dDlst_base_c** p_start, dDlst_base_c** p_end) {
         dlst->draw();
     }
 }
-
+#if DUSK_LUZMOD
+ResTIMG* dDlst_list_c::mToonImage;
+ResTIMG* dDlst_list_c::mToonExImage;
+#endif
 dDlst_2DT2_c dDlst_list_c::mWipeDlst;
 
 GXColor dDlst_list_c::mWipeColor = {0, 0, 0, 0};

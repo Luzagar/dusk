@@ -962,6 +962,11 @@ static int phase_0(dScnLogo_c* i_this) {
     i_this->mLogo01Heap = JKRCreateExpHeap(var_r28, i_this->mLogoHeap, false);
     JUT_ASSERT(1528, i_this->mLogo01Heap != NULL);
     JKRHEAP_NAME(i_this->mLogo01Heap, "Logo01");
+    
+    #if DUSK_LUZMOD
+     int rt = dComIfG_setObjectRes("System", (u8)0, NULL);
+     OsReport("System archive: %d\n", rt);
+    #endif
 
     #if TARGET_PC || VERSION == VERSION_GCN_PAL
     IF_DUSK_BLOCK(getGameVersion() == GameVersion::GcnPal)

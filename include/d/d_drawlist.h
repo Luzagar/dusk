@@ -447,6 +447,12 @@ public:
 #endif
 
     void peekZdata() { mPeekZ.peekData(); }
+#if DUSK_LUZMOD
+    static ResTIMG* getToonImage() { return mToonImage; }
+    static void setToonImage(ResTIMG* image) { mToonImage = image; }
+    static ResTIMG* getToonExImage() { return mToonExImage; }
+    static void setToonExImage(ResTIMG* image) { mToonExImage = image; }
+ #endif
     void entryZSortListZxlu(J3DPacket* i_packet, cXyz& param_1) {
         entryZSortXluDrawList(mDrawBuffers[DB_LIST_Z_XLU], i_packet, param_1);
     }
@@ -511,7 +517,10 @@ public:
     static void wipeOut(f32 i_rate) { wipeIn(-i_rate); }
     static void offWipe() { mWipe = 0; }
     static f32 getWipeRate() { return mWipeRate; }
-
+    #if DUSK_LUZMOD
+    static ResTIMG * mToonImage;
+    static ResTIMG * mToonExImage;
+    #endif
     static dDlst_2DT2_c mWipeDlst;
     static GXColor mWipeColor;
     static f32 mWipeRate;

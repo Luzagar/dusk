@@ -235,6 +235,7 @@ using std::isnan;
 #define IF_DUSK_ARG(expr) , expr
 #define IF_NOT_DUSK(statement)
 #define DUSK_IF_ELSE(dusk, orig) dusk
+#define DUSK_LUZMOD TARGET_PC
 #else
 #define IF_DUSK(statement)
 #define IF_DUSK_ARG(expr)

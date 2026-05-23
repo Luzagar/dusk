@@ -308,6 +308,84 @@ J3DModelData* dRes_info_c::loaderBasicBmd(u32 i_tag, void* i_data) {
 
     return (J3DModelData*)i_data;
 }
+#if DUSK_LUZMOD
+static void setToonTex(J3DModelData* pModel) {
+    J3DTexture * pTexture = pModel->getTexture();
+    if (pTexture != NULL) {
+        JUTNameTab * pTextureName = pModel->getTextureName();
+        if (pTextureName != NULL) {
+            for (u16 i = 0; i < pTexture->getNum(); i++) {
+                const char * pName = pTextureName->getName(i);
+                if (pName[0] == 'Z') {
+                    if (pName[1] == 'A') {
+                       pTexture->setResTIMG(i, *dDlst_list_c::getToonImage());
+                    }
+                    else if (pName[1] == 'B') {
+                          pTexture->setResTIMG(i, *dDlst_list_c::getToonExImage());
+                    }
+                }
+            }
+
+            j3dSys.setTexture(pTexture);
+
+            s32 isBDL = (pModel->getJointTree().getModelDataType() == 1);
+
+            for (u16 i = 0; i < pModel->getMaterialNum() ; i++) {
+                J3DMaterial * pMaterial = pModel->getMaterialNodePointer(i);
+                J3DTevBlock * pTevBlock = pMaterial->getTevBlock();
+
+                if (pTevBlock != NULL) {
+                    J3DGXColorS10 * pTev3 = pTevBlock->getTevColor(3);
+                    if (pTev3 != NULL)
+                        pTev3->a = pTevBlock->getTevStageNum();
+
+                    if (isBDL) {
+                        J3DDisplayListObj* pDL = pMaterial->getSharedDisplayListObj();
+                        BOOL ret = OSDisableInterrupts();
+                        GDInitGDLObj(&J3DDisplayListObj::sGDLObj, pDL->getDisplayList(0), pDL->getDisplayListSize());
+                        GDSetCurrent(&J3DDisplayListObj::sGDLObj);
+                        pTevBlock->patchTexNoAndTexCoordScale();
+                        OSRestoreInterrupts(ret);
+                        GDSetCurrent(NULL);
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* 8006DCEC-8006DFD4       .text setToonTex__FP16J3DMaterialTable */
+static void setToonTex(J3DMaterialTable* pMaterialTable) {
+    J3DTexture * pTexture = pMaterialTable->getTexture();
+    if (pTexture != NULL) {
+        JUTNameTab * pTextureName = pMaterialTable->getTextureName();
+        if (pTextureName != NULL) {
+            for (u16 i = 0; i < pTexture->getNum(); i++) {
+                const char * pName = pTextureName->getName(i);
+                if (pName[0] == 'Z') {
+                    if (pName[1] == 'A') {
+                    pTexture->setResTIMG(i, *dDlst_list_c::getToonImage());
+                    }
+                    else if (pName[1] == 'B') {
+                     pTexture->setResTIMG(i, *dDlst_list_c::getToonExImage());
+                    }
+                }
+            }
+
+            for (u16 i = 0; i < pMaterialTable->getMaterialNum() ; i++) {
+                J3DMaterial * pMaterial = pMaterialTable->getMaterialNodePointer(i);
+                J3DTevBlock * pTevBlock = pMaterial->getTevBlock();
+
+                if (pTevBlock != NULL) {
+                    J3DGXColorS10 * pTev3 = pTevBlock->getTevColor(3);
+                    if (pTev3 != NULL)
+                        pTev3->a = pTevBlock->getTevStageNum();
+                }
+            }
+        }
+    }
+}
+#endif
 
 int dRes_info_c::loadResource() {
     JUT_ASSERT(709, mRes == NULL);
@@ -371,6 +449,57 @@ int dRes_info_c::loadResource() {
 
                     int rt = dComIfG_setObjectRes(arcName, res, entry->data_size, parentHeap);
                     JUT_ASSERT(788, rt);
+                    #if DUSK_LUZMOD
+                      } else if (nodeType == 'BDL ') {
+                  void* rt = res;
+                rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x00002020);
+                if (rt == NULL)
+                    return -1;
+
+                setToonTex(((J3DModelData*)rt));
+            } else if (nodeType == 'BDLL') {
+               rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x00001020);
+                if (rt == NULL)
+                    return -1;
+               } else if (nodeType == 'BDLM') {
+                    rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x00002020);
+                    setToonTex(((J3DModelData*)rt));
+                if (rt == NULL)
+                    return -1;
+
+                for (u16 j = 0; j < ((J3DModelData*)rt)->getMaterialNum(); j++) {
+                    J3DMaterial* pMaterial = ((J3DModelData*)rt)->getMaterialNodePointer(j);
+
+                    J3DMaterialAnm* pAnm = new J3DMaterialAnm();
+                    if (pAnm == NULL)
+                        return -1;
+
+                    pMaterial->setMaterialAnm(pAnm);
+                }
+
+                 setToonTex(((J3DModelData*)rt));
+            } else if (nodeType == 'BDLI') {
+                rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x01002020);
+                if (rt == NULL)
+                    return -1;
+
+                for (u16 j = 0; j < ((J3DModelData*)rt)->getMaterialNum(); j++) {
+                    J3DMaterial* pMaterial = ((J3DModelData*)rt)->getMaterialNodePointer(j);
+
+                    J3DMaterialAnm* pAnm = new J3DMaterialAnm();
+                    if (pAnm == NULL)
+                        return -1;
+                    pMaterial->setMaterialAnm(pAnm);
+                }
+
+                setToonTex(((J3DModelData*)rt));
+            } else if (nodeType == 'BDLC') {
+                rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x00002020);
+                if (rt == NULL)
+                   return -1;
+
+                setToonTex(((J3DModelData*)rt));
+                    #endif
                 } else if (nodeType == 'BMDP') {
 #if DEBUG
                     g_kankyoHIO.navy.field_0x22a |= u16(0x100);
