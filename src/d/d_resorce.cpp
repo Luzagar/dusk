@@ -449,7 +449,7 @@ int dRes_info_c::loadResource() {
 
                     int rt = dComIfG_setObjectRes(arcName, res, entry->data_size, parentHeap);
                     JUT_ASSERT(788, rt);
-                    #if DUSK_LUZMOD
+                 #if DUSK_LUZMOD
                       } else if (nodeType == 'BDL ') {
                   void* rt = res;
                 rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x00002020);
@@ -458,11 +458,11 @@ int dRes_info_c::loadResource() {
 
                 setToonTex(((J3DModelData*)rt));
             } else if (nodeType == 'BDLL') {
-               rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x00001020);
+                    void* rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x00001020);
                 if (rt == NULL)
                     return -1;
                } else if (nodeType == 'BDLM') {
-                    rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x00002020);
+                   void* rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x00002020);
                     setToonTex(((J3DModelData*)rt));
                 if (rt == NULL)
                     return -1;
@@ -479,7 +479,7 @@ int dRes_info_c::loadResource() {
 
                  setToonTex(((J3DModelData*)rt));
             } else if (nodeType == 'BDLI') {
-                rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x01002020);
+                void* rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x01002020);
                 if (rt == NULL)
                     return -1;
 
@@ -494,7 +494,7 @@ int dRes_info_c::loadResource() {
 
                 setToonTex(((J3DModelData*)rt));
             } else if (nodeType == 'BDLC') {
-                rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x00002020);
+                void* rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x00002020);
                 if (rt == NULL)
                    return -1;
 

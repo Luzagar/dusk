@@ -965,7 +965,7 @@ static int phase_0(dScnLogo_c* i_this) {
     
     #if DUSK_LUZMOD
      int rt = dComIfG_setObjectRes("System", (u8)0, NULL);
-     OsReport("System archive: %d\n", rt);
+     printf("System archive: %d\n", rt);
     #endif
 
     #if TARGET_PC || VERSION == VERSION_GCN_PAL
