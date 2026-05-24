@@ -964,8 +964,8 @@ static int phase_0(dScnLogo_c* i_this) {
     JKRHEAP_NAME(i_this->mLogo01Heap, "Logo01");
     
     #if DUSK_LUZMOD
-     int rt = dComIfG_setObjectRes("System", (u8)0, NULL);
-     printf("System archive: %d\n", rt);
+    int rt = dComIfG_setObjectRes("System", (u8)0, NULL);
+    OSReport("System archive is %s\n", rt ? "loaded" : "not loaded");
     #endif
 
     #if TARGET_PC || VERSION == VERSION_GCN_PAL
