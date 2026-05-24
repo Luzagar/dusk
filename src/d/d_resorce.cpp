@@ -450,55 +450,48 @@ int dRes_info_c::loadResource() {
                     int rt = dComIfG_setObjectRes(arcName, res, entry->data_size, parentHeap);
                     JUT_ASSERT(788, rt);
                  #if DUSK_LUZMOD
-                      } else if (nodeType == 'BDL ') {
-                  void* rt = res;
-                rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x00002020);
-                if (rt == NULL)
-                    return -1;
-
-                setToonTex(((J3DModelData*)rt));
-            } else if (nodeType == 'BDLL') {
-                    void* rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x00001020);
-                if (rt == NULL)
-                    return -1;
-               } else if (nodeType == 'BDLM') {
-                   void* rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x00002020);
-                    setToonTex(((J3DModelData*)rt));
-                if (rt == NULL)
-                    return -1;
-
-                for (u16 j = 0; j < ((J3DModelData*)rt)->getMaterialNum(); j++) {
-                    J3DMaterial* pMaterial = ((J3DModelData*)rt)->getMaterialNodePointer(j);
-
-                    J3DMaterialAnm* pAnm = new J3DMaterialAnm();
-                    if (pAnm == NULL)
+                } else if (nodeType == 'BDL ') {
+                    res = J3DModelLoaderDataBase::loadBinaryDisplayList(res, 0x00002020);
+                    if (res == NULL)
+                        return -1;
+                    setToonTex((J3DModelData*)res);
+                } else if (nodeType == 'BDLL') {
+                    res = J3DModelLoaderDataBase::loadBinaryDisplayList(res, 0x00001020);
+                    if (res == NULL)
+                        return -1;
+                } else if (nodeType == 'BDLM') {
+                    res = J3DModelLoaderDataBase::loadBinaryDisplayList(res, 0x00002020);
+                    if (res == NULL)
                         return -1;
 
-                    pMaterial->setMaterialAnm(pAnm);
-                }
-
-                 setToonTex(((J3DModelData*)rt));
-            } else if (nodeType == 'BDLI') {
-                void* rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x01002020);
-                if (rt == NULL)
-                    return -1;
-
-                for (u16 j = 0; j < ((J3DModelData*)rt)->getMaterialNum(); j++) {
-                    J3DMaterial* pMaterial = ((J3DModelData*)rt)->getMaterialNodePointer(j);
-
-                    J3DMaterialAnm* pAnm = new J3DMaterialAnm();
-                    if (pAnm == NULL)
+                    J3DModelData* md = (J3DModelData*)res;
+                    for (u16 j = 0; j < md->getMaterialNum(); j++) {
+                        J3DMaterial* pMaterial = md->getMaterialNodePointer(j);
+                        J3DMaterialAnm* pAnm = new J3DMaterialAnm();
+                        if (pAnm == NULL)
+                            return -1;
+                        pMaterial->setMaterialAnm(pAnm);
+                    }
+                    setToonTex(md);
+                } else if (nodeType == 'BDLI') {
+                    res = J3DModelLoaderDataBase::loadBinaryDisplayList(res, 0x01002020);
+                    if (res == NULL)
                         return -1;
-                    pMaterial->setMaterialAnm(pAnm);
-                }
 
-                setToonTex(((J3DModelData*)rt));
-            } else if (nodeType == 'BDLC') {
-                void* rt = J3DModelLoaderDataBase::loadBinaryDisplayList(rt, 0x00002020);
-                if (rt == NULL)
-                   return -1;
-
-                setToonTex(((J3DModelData*)rt));
+                    J3DModelData* md = (J3DModelData*)res;
+                    for (u16 j = 0; j < md->getMaterialNum(); j++) {
+                        J3DMaterial* pMaterial = md->getMaterialNodePointer(j);
+                        J3DMaterialAnm* pAnm = new J3DMaterialAnm();
+                        if (pAnm == NULL)
+                            return -1;
+                        pMaterial->setMaterialAnm(pAnm);
+                    }
+                    setToonTex(md);
+                } else if (nodeType == 'BDLC') {
+                    res = J3DModelLoaderDataBase::loadBinaryDisplayList(res, 0x00002020);
+                    if (res == NULL)
+                        return -1;
+                    setToonTex((J3DModelData*)res);
                     #endif
                 } else if (nodeType == 'BMDP') {
 #if DEBUG

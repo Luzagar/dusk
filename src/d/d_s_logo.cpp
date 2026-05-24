@@ -1,4 +1,4 @@
-/**
+﻿/**
  * d_s_logo.cpp
  * Game Boot Logo's Display
  */
@@ -1052,6 +1052,27 @@ static int phase_2(dScnLogo_c* i_this) {
     if (dComIfG_syncAllObjectRes()) {
         return cPhs_INIT_e;
     } else {
+#if DUSK_LUZMOD
+        OSReport("All archives loaded, extracting toon textures...\n");
+
+        ResTIMG* toonImage;
+
+        toonImage = (ResTIMG*)dComIfG_getObjectRes("System", 0x3);
+        if (toonImage == NULL) {
+            OSReport("ZAtoon (file 0x3) is NULL!\n");
+        } else {
+            OSReport("ZAtoon loaded at %p\n", toonImage);
+            dDlst_list_c::setToonImage(toonImage);
+        }
+
+        toonImage = (ResTIMG*)dComIfG_getObjectRes("System", 0x4);
+        if (toonImage == NULL) {
+            OSReport("ZBtoonEX (file 0x4) is NULL!\n");
+        } else {
+            OSReport("OK: ZBtoonEX loaded at %p\n", toonImage);
+            dDlst_list_c::setToonExImage(toonImage);
+        }
+#endif
         return cPhs_COMPLEATE_e;
     }
 }
@@ -1489,6 +1510,10 @@ void dScnLogo_c::dvdDataLoad() {
     rt = dComIfG_setObjectRes("Alink", (u8)0, NULL);
     JUT_ASSERT(2429, rt == 1);
 
+    #if DUSK_LUZMOD
+    dComIfG_setObjectRes("Boom", (u8)0, NULL);
+    OSReport("Boom archive is %s\n", rt ? "loaded" : "not loaded");
+    #endif
     #if PLATFORM_WII || PLATFORM_SHIELD
     rt = dComIfG_setObjectRes("NNGC", (u8)0, NULL);
     JUT_ASSERT(2433, rt == 1);
